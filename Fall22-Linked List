@@ -1,0 +1,127 @@
+package LinkedListOperators;
+
+import LinkedLists.IntNode;
+
+public class nodeWorker {
+
+	public static void main(String[] args) {
+		
+		System.out.println("This is code that works with a linked list of intgers");
+		
+		IntNode head = new IntNode(0, null);
+		
+		head.addNodeAfter(4);
+		head.addNodeAfter(8);
+		head.addNodeAfter(13);
+		head.addNodeAfter(24);
+		head.addNodeAfter(51);
+		head.addNodeAfter(68);
+		head.addNodeAfter(17);
+		
+		System.out.println("The number of nodes in our linked list is: " + head.getLength(head));
+		
+		head.deleteNodeAfter();
+
+		System.out.println("Update - The number of nodes in our linked list is: " + head.getLength(head));
+		
+		//head.printList(head);
+		
+	}
+
+}
+
+
+
+//int node class
+
+
+package LinkedLists;
+
+import LinkedLists.IntNode;
+
+public class IntNode {
+	
+	private int key;
+	
+	private IntNode nextNode;
+	private IntNode previousNode;
+	
+	public IntNode(int key, IntNode nextNode) {
+		this.key = key;
+		this.nextNode = nextNode;
+		//this.previousNode = previousNode;
+	}
+	
+	public int getKey() {
+		return this.key;
+	}
+	
+	public void setKey(int newKey) {
+		//Make sure it is a new key
+		this.key = newKey;
+	}
+	
+	public IntNode getNext() {
+		return this.nextNode;
+	}
+	
+	public IntNode getPrevious() {
+		return this.previousNode;
+	}
+	
+	public void setNext(IntNode newNext) {
+		this.nextNode = newNext;
+	}
+	
+	public void setPrevious(IntNode newPrevious) {
+		this.previousNode = newPrevious;
+	}
+	
+	public void addNodeAfter(int newKey) {
+		this.nextNode = new IntNode(newKey, this.nextNode);
+	}
+	
+	public boolean deleteNodeAfter() {
+		boolean status = true;
+		
+		if(this.nextNode != null) {
+			this.nextNode = this.nextNode.nextNode;
+		}else status = false;
+		
+		return status;
+	}
+	
+	public int getLength(IntNode head) {
+		
+		int cnt = 0;
+		
+		IntNode current;
+		
+		for(current = head; current.nextNode != null; current = current.nextNode) {
+			System.out.println("This node is " + current.getKey());
+			cnt++;
+		}
+		
+		return cnt;
+		
+	}
+	
+	public void addNodeBefore(int newKey) {
+		this.previousNode = new IntNode(newKey, this.previousNode);
+	}
+	
+	public boolean deleteNodeBefore() {
+		boolean status = true;
+		
+		if(this.previousNode != null) {
+			this.previousNode = this.previousNode.previousNode;
+		} else status = false;
+		
+		return status;
+		
+	}
+		
+	
+	
+
+}
