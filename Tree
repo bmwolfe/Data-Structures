@@ -1,0 +1,174 @@
+package textbook;
+
+public class playerManagementSystem {
+
+	public static void main(String[] args) {
+		System.out.println("Working with a binary search tree with a Wiley the coyote spirit (:");
+
+		TreeNode root  = new TreeNode("Michael", null, null, null);
+		TreeNode bob  = new TreeNode("Bob", null, null, null);
+		TreeNode alice  = new TreeNode("Alice", null, null, null);
+		TreeNode eve  = new TreeNode("Eve", null, null, null);
+		TreeNode mallory  = new TreeNode("Mallory", null, null, null);
+		TreeNode john  = new TreeNode("John", null, null, null);
+		TreeNode jim  = new TreeNode("Jim", null, null, null);
+		TreeNode lucas  = new TreeNode("Lucas", null, null, null);
+		TreeNode debbie  = new TreeNode("Debbie", null, null, null);
+		TreeNode prince  = new TreeNode("Prince", null, null, null);
+		
+		root.insertNode(root, bob, null, 0);
+		root.insertNode(root, alice, null, 0);
+		root.insertNode(root, eve, null, 0);
+		root.insertNode(root, mallory, null, 0);
+		root.insertNode(root, john, null, 0);
+		root.insertNode(root, jim, null, 0);
+		root.insertNode(root, lucas, null, 0);
+		root.insertNode(root, debbie, null, 0);
+		root.insertNode(root, prince, null, 0);
+		
+		TreeNode searchNode = root.searchPlayer(root, "Eve");
+		
+		if (searchNode != null) {
+			System.out.println("Found the node with key: " + searchNode.getPlayerName());
+		}
+		
+		root.RemovePlayer(root, eve);
+		
+        searchNode = root.searchPlayer(root, "Eve");
+		
+		if (searchNode != null) {
+			System.out.println("Found the node with key: " + searchNode.getPlayerName());
+		} else System.out.println("Player not found"); 
+		
+	}
+
+}
+
+
+
+//Tree Node Class
+
+
+
+package textbook;
+
+public class TreeNode {
+private String playerName;
+	
+	private TreeNode parent, leftChild, rightChild;
+	
+	public TreeNode(String playerName, TreeNode parent, TreeNode leftChild, TreeNode rightChild) {
+		   this.playerName = playerName;
+		   this.parent = parent;
+		   this.leftChild = leftChild;
+		   this.rightChild = rightChild;
+	}
+	
+	
+	public String getPlayerName() {
+		   return this.playerName;
+	}
+	
+	
+	public TreeNode getLeftChild() {
+		   return this.leftChild;
+	}
+	
+	
+	public TreeNode getRightChild() {
+		   return this.rightChild;
+	}
+	
+	
+	public TreeNode searchPlayer(TreeNode currentNode, String searchName) {
+	       if (currentNode == null) return null;
+		
+	       String currentName = currentNode.getPlayerName();
+	       
+	       int comparison = currentName.compareToIgnoreCase(searchName);
+	       
+	       if (comparison == 0) return currentNode;
+	       
+	       if (comparison < 0) {
+	    	   return searchPlayer(currentNode.rightChild, searchName);
+	       } else {
+	    	   return searchPlayer(currentNode.leftChild, searchName);
+	       }
+	}
+	
+	
+	public void insertNode(TreeNode currentNode, TreeNode newNode, TreeNode parentOfCurrentNode, int flg) {
+	      
+	       if (currentNode == null && parentOfCurrentNode != null) {
+	    	   newNode.parent = parentOfCurrentNode;
+	    	   
+	    	   if (flg == 0) {
+	    	      parentOfCurrentNode.leftChild = newNode;
+	    	   } else parentOfCurrentNode.rightChild = newNode;
+	    	   
+	    	   return;
+	       }
+		 
+	       String currentName = currentNode.getPlayerName();
+	       String searchName = newNode.getPlayerName();
+	       
+	       int comparison = currentName.compareToIgnoreCase(searchName);
+	        
+	       if (comparison < 0) {
+	    	   insertNode(currentNode.rightChild, newNode, currentNode, 1);
+	       } else {
+	    	     insertNode(currentNode.leftChild, newNode, currentNode, 0);
+	       }	
+	}
+	
+	
+	public TreeNode TreeMinimum(TreeNode currentNode) { 
+	       while (currentNode.leftChild != null)
+	    	   currentNode = currentNode.leftChild;
+	       
+	       return currentNode;
+	}
+	
+	
+	public TreeNode Transplant(TreeNode root, TreeNode disqualifiedPlayer, TreeNode advancingPlayer) {
+		   if (disqualifiedPlayer.parent == null) {
+			   return advancingPlayer;
+		   }
+		
+		   if (disqualifiedPlayer == disqualifiedPlayer.parent.leftChild) {
+			   disqualifiedPlayer.parent.leftChild = advancingPlayer;
+		   } else {
+			   disqualifiedPlayer.parent.rightChild = advancingPlayer;
+		   }
+		   
+		   if (advancingPlayer != null) advancingPlayer.parent = disqualifiedPlayer.parent;
+			   
+		   return root;	   
+	}
+	
+	
+	public void RemovePlayer(TreeNode root, TreeNode disqualifiedPlayer) {
+	      TreeNode replacementNode = null;
+	      
+	      if (disqualifiedPlayer.leftChild == null) {
+	    	  this.Transplant(root, disqualifiedPlayer, disqualifiedPlayer.rightChild);    
+	      } else if (disqualifiedPlayer.rightChild == null) {
+	    	        this.Transplant(root, disqualifiedPlayer, disqualifiedPlayer.leftChild); 
+	      } else {
+	    	      replacementNode = TreeMinimum(disqualifiedPlayer.rightChild);
+	    	      
+	    	      if (replacementNode.parent != disqualifiedPlayer) {
+	    	    	  this.Transplant(root, replacementNode, replacementNode.rightChild);
+	    	    	  replacementNode.rightChild = disqualifiedPlayer.rightChild;
+	    	    	  replacementNode.rightChild.parent  = replacementNode;
+	    	      }
+	    	      
+	    	      this.Transplant(root, disqualifiedPlayer, replacementNode);
+	    	      
+	    	      replacementNode.leftChild = disqualifiedPlayer.leftChild;
+	    	      
+	    	      replacementNode.leftChild.parent  = replacementNode;
+	      }
+	}
+	
+}
