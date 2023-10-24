@@ -1,0 +1,181 @@
+package hashTableCode;
+
+import HashtableClasses.HashTableManager;
+import HashtableClasses.PersonRecord;
+
+public class OlympicGames2024 {
+
+	public static void main(String[] args) {
+		System.out.println("Welcome to Paris!! The city of love.");
+		
+		HashTableManager roster = new HashTableManager(100);
+		
+		//PersonRecord(long playerID, int age, int height, String fullName, String profession)
+		
+		PersonRecord alice = new PersonRecord(8600, 84, 6, "Alice", "Teacher");
+		
+		PersonRecord bob = new PersonRecord(4158, 83, 7, "Bob", "Dean of Engineering");
+		
+		PersonRecord eve = new PersonRecord(1337, 66, 5, "Swordfish", "Phishing Unprofessional");
+
+		roster.insertRecord(alice);
+		roster.insertRecord(bob);
+		roster.insertRecord(eve);
+		
+		PersonRecord searchOutcome = roster.searchRecord(4158);
+		
+		if (searchOutcome != null) {
+			System.out.println("We found Bob");
+		} else System.out.println("Bob is not here");
+	
+		roster.deleteRecord(4158);
+		
+        searchOutcome = roster.searchRecord(4158);
+		
+		if (searchOutcome != null) {
+			System.out.println("We found Bob again");
+		} else System.out.println("Bob is not here any longer.");
+		
+	}
+
+}
+
+
+
+
+
+//Hash Table Manager Class
+
+
+
+
+
+package HashtableClasses;
+
+public class HashTableManager {
+      
+	private PersonRecord[] HT;
+    
+	private int size;
+	
+	private int counter = 0;
+    
+	private int searchIndx = -1;
+	
+	public HashTableManager(int arraySize) {
+		HT = new PersonRecord[size = arraySize];
+		
+		for (int i = 0; i < size; i++) {
+			HT[i] = null;
+		}
+	}
+	
+	
+	private int hashFunction(long key) {
+		return (int) key % size;
+	}
+	
+	
+	public void insertRecord(PersonRecord newRecord) {
+		
+		if (counter == size) return; //raise exception here to say that the hash table is full.
+		 
+		long key = newRecord.getPlayerID();
+		
+		int hash = this.hashFunction(key);
+		
+		while (HT[hash] != null && HT[hash].getStatus() == true) 
+			  hash = (hash++) % size;
+		
+		HT[hash] = newRecord;
+		
+		counter++;
+	}
+	
+	
+	public boolean deleteRecord(long deleteKey) {
+		searchRecord(deleteKey);
+		
+		if (searchIndx == -1) return false;
+		else {
+			  HT[searchIndx].setStatus(false); 
+			  return true;
+		}
+	}
+	
+	
+	public PersonRecord searchRecord(long searchKey) {
+	
+		PersonRecord foundPerson = null;
+		
+		int hash = this.hashFunction(searchKey);
+		
+		int startPoint = hash;
+		
+		searchIndx = -1;
+		
+		while (HT[hash] != null) {
+			  long currentKey = HT[hash].getPlayerID();  
+			  
+			  if ((currentKey == searchKey) && (HT[hash].getStatus() == true)) {
+			     foundPerson = HT[hash];
+			     searchIndx = hash;
+			     break;
+			  } else {
+			      hash = (hash++) % size;
+			      
+			      if (hash == startPoint) break;
+			  }
+		}
+		
+		return foundPerson;
+	}	
+}
+
+
+
+
+
+//Personal Record Class
+
+
+
+
+
+package HashtableClasses;
+
+public class PersonRecord {
+
+	private long playerID;
+	
+	private int age, height;
+	
+	private String fullName, profession;
+	
+	private boolean status = true;
+	
+	public PersonRecord(long playerID, int age, int height, String fullName, String profession) {
+		  this.playerID = playerID; 
+		  this.age = age;
+		  this.height = height;
+		  this.fullName = fullName;
+		  this.profession = profession;
+	}
+	
+	public long getPlayerID() {
+		  return playerID;
+	}
+	
+	public void setPlayerID(long playerID) {
+		  this.playerID = playerID;
+	}
+	
+	public boolean getStatus() {
+		  return status;
+	}
+	
+	public void setStatus(boolean status) {
+		  this.status = status;
+	}
+	
+}
