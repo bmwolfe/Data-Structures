@@ -35,3 +35,91 @@ public class BagOperator1 {
 	}
 
 }
+
+
+//bag class
+
+package DataStructures;
+
+import java.io.IOException;
+
+public class Bag {
+	private int bagSize;
+	
+	private int[] bagContents;
+	
+	private int cnt;
+	
+	public Bag(int bagSize) {
+		this.bagSize = bagSize;
+		
+		bagContents = new int[bagSize];
+		
+		cnt = 0;
+	}
+	
+	public boolean addItem(int item) {
+		
+		boolean status = true;
+		
+		if(cnt < bagSize) {
+			bagContents[cnt] = item;
+			cnt++;
+		} else {
+			status = false;
+		}
+		
+		return status;
+		
+	}
+	
+	public int getCount() {
+		return cnt;
+	}
+	
+	public int countOccurrences(int target) {
+		int occurrences = 0;
+		
+		int index;
+		
+		for(index = 0; index < cnt; index++) {
+			if(bagContents[index] == target) {
+				occurrences++;
+			}
+		}
+		
+		return occurrences;
+		
+	}
+	
+	//Precondition: There exists at least one data item equal to target.
+	//Postcondition: Replace the target with the last item in the array and reduce the size of the array
+	public void removeItem(int target) throws IOException{
+		int occurrences = countOccurrences(target);
+		int i;
+		
+		if(occurrences > 0) {
+			
+			i = 0;
+			do {
+				if(bagContents[i] == target) {
+				   cnt--;
+				   if(cnt > 1)
+				   bagContents[i] = bagContents[cnt];
+				   
+				   break;
+				} else {
+					i++;
+				}
+				
+			} while(i < cnt);
+		} else {
+			throw new IOException("No target found");
+		}
+		
+	}
+	
+	
+	
+}
+
