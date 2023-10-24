@@ -1,0 +1,37 @@
+package BagOperators;
+
+import java.io.IOException;
+
+import DataStructures.Bag;
+
+public class BagOperator1 {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+
+		System.out.println("I am a bag operator.");
+		
+		Bag x = new Bag(10);
+		
+		x.addItem(6);
+		x.addItem(9);
+		x.addItem(8);
+		x.addItem(9);
+		x.addItem(10);
+		x.addItem(5);
+		x.addItem(9);
+		x.addItem(9);
+		
+		System.out.println("The current number of ints in the bag is: " + x.getCount());
+		
+		System.out.println("The number of occurrences of target 9 is: " + x.countOccurrences(9));
+		
+		x.removeItem(9);
+		
+		System.out.println("After removing a 9 the number of occurrences of target 9 is: " + x.countOccurrences(9));
+		
+		x.removeItem(15);
+		
+	}
+
+}
